@@ -5,6 +5,98 @@
     box-sizing: border-box;
 }
 
+/* Предотвращение горизонтальной прокрутки на мобильных */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Улучшенная touch-friendly навигация */
+@media (hover: none) and (pointer: coarse) {
+    /* Для сенсорных устройств */
+    button, .upload-area {
+        min-height: 44px; /* Рекомендуемая минимальная высота для touch */
+    }
+
+    .format-btn, .download-btn, .buy-tokens-btn {
+        min-height: 48px;
+    }
+}
+
+/* Retina дисплеи */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Более четкие границы и тени для Retina */
+    .upload-area, .converter-section, .download-section {
+        border-width: 1px;
+    }
+
+    .logo {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Предпочтения пользователя - уменьшенное движение */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Темная тема (если поддерживается браузером) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        color: #f0f6fc;
+    }
+
+    .upload-area, .converter-section, .download-section {
+        background: rgba(33, 38, 45, 0.95);
+        border-color: #30363d;
+        color: #f0f6fc;
+    }
+
+    .upload-hint {
+        background: rgba(33, 38, 45, 0.9);
+        border-color: rgba(0, 188, 212, 0.3);
+    }
+
+    .format-btn {
+        background: rgba(33, 38, 45, 0.8);
+        border-color: #30363d;
+        color: #f0f6fc;
+    }
+
+    .format-btn:hover {
+        background: rgba(0, 188, 212, 0.1);
+        border-color: #00bcd4;
+    }
+
+    .format-btn.selected {
+        background: #00bcd4;
+        color: white;
+    }
+
+    header h1, header p {
+        color: #f0f6fc;
+    }
+
+    .demo-notice {
+        background: rgba(33, 38, 45, 0.9);
+    }
+
+    .toast {
+        background: #238636;
+        color: white;
+    }
+
+    .toast.error {
+        background: #da3633;
+    }
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #1a237e 0%, #004d40 100%);
@@ -534,6 +626,82 @@ footer {
 }
 
 /* Адаптивность */
+
+/* Большие экраны (1440px и больше) */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+    }
+
+    .upload-area {
+        padding: 80px 60px;
+        margin-left: 200px;
+        margin-right: 200px;
+    }
+
+    header h1 {
+        font-size: 3rem;
+    }
+
+    .convert-btn {
+        max-width: 350px;
+        padding: 18px 35px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Очень большие экраны (1920px и больше) */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px;
+    }
+
+    .upload-area {
+        padding: 100px 80px;
+        margin-left: 250px;
+        margin-right: 250px;
+    }
+
+    .convert-btn {
+        max-width: 400px;
+    }
+}
+
+/* Планшеты и маленькие ноутбуки (1024px - 1439px) */
+@media (max-width: 1439px) and (min-width: 1025px) {
+    .upload-area {
+        padding: 60px 40px;
+        margin-left: 80px;
+        margin-right: 80px;
+    }
+
+    .convert-btn {
+        max-width: 280px;
+    }
+}
+
+/* Планшеты (768px - 1024px) */
+@media (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    .upload-area {
+        padding: 50px 30px;
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .convert-btn {
+        max-width: 250px;
+    }
+}
+
+/* Маленькие планшеты и большие телефоны (768px и меньше) */
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -569,6 +737,8 @@ footer {
 
     .upload-area {
         padding: 40px 20px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
     .upload-hint {
@@ -598,6 +768,89 @@ footer {
 
     .download-all-btn, .clear-btn {
         width: 100%;
+    }
+
+    .toast {
+        left: 10px;
+        right: 10px;
+        width: auto;
+    }
+}
+
+/* Маленькие мобильные (480px и меньше) */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .upload-area {
+        padding: 30px 15px;
+        margin-left: 2px;
+        margin-right: 2px;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+    }
+
+    .upload-area p {
+        font-size: 1.1rem;
+    }
+
+    .upload-hint {
+        font-size: 0.8rem;
+        padding: 8px 10px;
+        margin-top: 10px;
+        max-width: calc(100% - 10px);
+    }
+
+    .format-btn {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .convert-btn {
+        padding: 14px 20px;
+        font-size: 1rem;
+    }
+
+    .toast {
+        top: 10px;
+        left: 5px;
+        right: 5px;
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Очень маленькие экраны (360px и меньше) */
+@media (max-width: 360px) {
+    .container {
+        padding: 5px;
+    }
+
+    header h1 {
+        font-size: 1.6rem;
+    }
+
+    .upload-area {
+        padding: 25px 10px;
+        border-radius: 10px;
+    }
+
+    .upload-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .upload-hint {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+    }
+
+    .format-btn {
+        padding: 10px;
+        font-size: 0.85rem;
     }
 }
 

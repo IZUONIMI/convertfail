@@ -147,6 +147,7 @@ class FileConverter {
         this.files = [...this.files, ...validFiles];
         this.updateFileList();
         this.showConverterSection();
+        this.updateAvailableFormats();
         this.showToast(`Загружено ${validFiles.length} файл(ов)`, 'success');
     }
 
@@ -217,13 +218,14 @@ class FileConverter {
 
             const icon = this.getFileIcon(file.type);
             const size = this.formatFileSize(file.size);
+            const fileType = this.getFileTypeCategory(file.type);
 
             fileItem.innerHTML = `
                 <div class="file-info">
                     <div class="file-icon">${icon}</div>
                     <div class="file-details">
                         <h4>${file.name}</h4>
-                        <p>${size} • ${file.type || 'Неизвестный тип'}</p>
+                        <p>${size} • ${fileType}</p>
                     </div>
                 </div>
                 <button onclick="fileConverter.removeFile(${index})" class="remove-btn" title="Удалить">×</button>
@@ -232,7 +234,51 @@ class FileConverter {
             listContainer.appendChild(fileItem);
         });
 
-        // Форматы теперь обновляются через левую панель
+        // Форматы теперь обновляются автоматически
+    }
+
+    updateAvailableFormats() {
+        const formatButtons = document.getElementById('formatButtons');
+        formatButtons.innerHTML = '';
+
+        const formats = this.getAvailableFormats();
+
+        if (formats.length === 0) {
+            formatButtons.innerHTML = '<p class="no-formats">Нет доступных форматов конвертации для выбранных файлов</p>';
+            return;
+        }
+
+        // Добавляем заголовок с информацией о файлах
+        const formatHeader = document.createElement('div');
+        formatHeader.className = 'format-header';
+        formatHeader.innerHTML = `
+            <h4>Доступные форматы конвертации:</h4>
+            <p class="format-info">Выберите формат для конвертации ${this.files.length} файл(ов)</p>
+        `;
+        formatButtons.appendChild(formatHeader);
+
+        formats.forEach(format => {
+            const button = document.createElement('button');
+            button.className = 'format-btn';
+            button.textContent = format.label;
+            button.dataset.format = format.value;
+            button.onclick = () => this.selectFormat(format.value, button);
+
+            formatButtons.appendChild(button);
+        });
+    }
+
+    getFileTypeCategory(type) {
+        if (type === 'application/pdf') return 'PDF документ';
+        if (type === 'application/msword' || type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') return 'Word документ';
+        if (type === 'application/vnd.ms-excel' || type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') return 'Excel таблица';
+        if (type === 'application/vnd.ms-powerpoint' || type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') return 'PowerPoint презентация';
+        if (type === 'text/plain') return 'Текстовый файл';
+        if (type === 'text/csv') return 'CSV файл';
+        if (type.startsWith('image/')) return 'Изображение';
+        if (type.startsWith('video/')) return 'Видео';
+        if (type.startsWith('audio/')) return 'Аудио';
+        return 'Файл';
     }
 
     getFileIcon(type) {
@@ -262,6 +308,9 @@ class FileConverter {
 
         if (this.files.length === 0) {
             this.hideConverterSection();
+        } else {
+            // Обновляем доступные форматы после удаления файла
+            this.updateAvailableFormats();
         }
 
         this.showToast(`Файл "${file.name}" удален`, 'success');
@@ -269,6 +318,7 @@ class FileConverter {
 
     showConverterSection() {
         document.getElementById('converterSection').style.display = 'block';
+        this.updateAvailableFormats();
     }
 
     hideConverterSection() {
@@ -377,22 +427,11 @@ class FileConverter {
         button.classList.add('selected');
 
         this.selectedFormat = format;
-        this.updateConversionDisplay();
         document.getElementById('convertBtn').disabled = false;
-    }
 
-    updateConversionDisplay() {
-        const selectedConversion = document.getElementById('selectedConversion');
-        const display = document.getElementById('conversionDisplay');
-
-        if (this.selectedFormat) {
-            const formatName = this.getFormatName(this.selectedFormat);
-            display.innerHTML = `<strong>Конвертация в:</strong> <span class="selected-format">${formatName}</span>`;
-            selectedConversion.style.display = 'block';
-        } else {
-            display.innerHTML = '<span class="no-conversion">Выберите формат конвертации</span>';
-            selectedConversion.style.display = 'none';
-        }
+        // Показываем уведомление о выборе формата
+        const formatName = this.getFormatName(this.selectedFormat);
+        this.showToast(`Выбран формат: ${formatName}`, 'success');
     }
 
     getFormatName(format) {

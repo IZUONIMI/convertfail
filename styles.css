@@ -439,6 +439,7 @@ header p {
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.9);
+    color: #263238;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -448,14 +449,42 @@ header p {
 .format-btn:hover {
     border-color: #00bcd4;
     background: rgba(0, 188, 212, 0.05);
+    color: #263238;
     transform: translateY(-1px);
 }
 
 .format-btn.selected {
     border-color: #00bcd4;
     background: #00bcd4;
-    color: white;
+    color: #263238;
     box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+}
+
+.format-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.format-header h4 {
+    margin-bottom: 8px;
+    color: #263238;
+    font-size: 1.1rem;
+}
+
+.format-info {
+    color: #546e7a;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.no-formats, .no-files-message {
+    text-align: center;
+    color: #607d8b;
+    font-style: italic;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    margin: 20px 0;
 }
 
 .convert-btn {

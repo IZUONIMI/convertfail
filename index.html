@@ -9,8 +9,14 @@
 <body>
     <div class="container">
         <header>
-            <h1>🛠️ Конвертер Форматов Файлов</h1>
-            <p>Конвертируйте PDF, изображения и видео онлайн</p>
+            <div class="logo-container">
+                <img src="0YIgNUo0NS.png" alt="Логотип" class="logo">
+                <div class="title-container">
+            <h1>Универсальный Конвертер Файлов</h1>
+            <p>Конвертируйте документы, изображения, видео и аудио онлайн</p>
+            </div>
+                </div>
+            </div>
         </header>
 
         <main>
@@ -19,8 +25,15 @@
                     <div class="upload-area" id="uploadArea">
                         <div class="upload-icon">📁</div>
                         <p>Перетащите файлы сюда или <button type="button" onclick="document.getElementById('fileInput').click()" class="upload-link">выберите файлы</button></p>
-                        <p class="upload-hint">Поддержка: PDF, JPG, PNG, GIF, WebP, MP4, AVI, MOV, WebM (макс 50MB)</p>
-                        <input type="file" id="fileInput" name="files" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.mp4,.avi,.mov,.webm" style="display: none;">
+                        <div class="upload-hint">
+                            <strong>Поддерживаемые форматы:</strong><br>
+                            📄 <strong>Документы:</strong> PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV<br>
+                            🖼️ <strong>Изображения:</strong> JPG, PNG, GIF, WebP, BMP, TIFF, SVG, HEIC<br>
+                            🎥 <strong>Видео:</strong> MP4, AVI, MOV, WMV, WebM, MKV<br>
+                            🎵 <strong>Аудио:</strong> MP3, WAV, OGG, AAC, FLAC<br>
+                            <small>Максимальный размер файла: 50MB</small>
+                        </div>
+                        <input type="file" id="fileInput" name="files" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.jpg,.jpeg,.png,.gif,.webp,.bmp,.tiff,.svg,.heic,.heif,.mp4,.avi,.mov,.wmv,.flv,.webm,.mkv,.mp3,.wav,.ogg,.m4a,.aac,.flac,.wma" style="display: none;">
                     </div>
                 </form>
             </div>
@@ -35,10 +48,18 @@
                     <div class="format-buttons" id="formatButtons"></div>
                 </div>
 
+                <div class="selected-conversion" id="selectedConversion" style="display: none;">
+                    <h4>Выбранная конвертация:</h4>
+                    <div class="conversion-display" id="conversionDisplay">
+                        <span class="no-conversion">Выберите формат конвертации</span>
+                    </div>
+                </div>
+
                 <button id="convertBtn" class="convert-btn" disabled>
                     🔄 Начать конвертацию
                 </button>
             </div>
+
 
             <div class="progress-section" id="progressSection" style="display: none;">
                 <div class="progress-container">
@@ -60,11 +81,10 @@
         </main>
 
         <footer>
-            <p>© 2026 Конвертер Файлов | Поддержка: PDF, изображения, видео</p>
+            <p>© 2024 Конвертер Файлов | Поддержка: PDF, изображения, видео</p>
         </footer>
     </div>
 
     <script src="app.js"></script>
 </body>
 </html>
-

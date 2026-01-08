@@ -1,0 +1,410 @@
+/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Заголовок */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Секция загрузки */
+.upload-section {
+    margin-bottom: 30px;
+}
+
+.upload-area {
+    background: white;
+    border: 3px dashed #ddd;
+    border-radius: 15px;
+    padding: 60px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.upload-area:hover {
+    border-color: #667eea;
+    background: #f8f9ff;
+}
+
+.upload-area.drag-over {
+    border-color: #667eea;
+    background: #f8f9ff;
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: #667eea;
+}
+
+.upload-area p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.upload-link {
+    background: none;
+    border: none;
+    color: #667eea;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-family: inherit;
+}
+
+.upload-link:hover {
+    color: #5a67d8;
+}
+
+.upload-hint {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 10px;
+}
+
+/* Секция конвертера */
+.converter-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.file-list {
+    margin-bottom: 30px;
+}
+
+.file-list h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.file-icon {
+    font-size: 2rem;
+    margin-right: 15px;
+}
+
+.file-details h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.file-details p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.remove-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.remove-btn:hover {
+    background: #c82333;
+}
+
+.conversion-options h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.format-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.format-btn {
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.format-btn:hover {
+    border-color: #667eea;
+    background: #f8f9ff;
+}
+
+.format-btn.selected {
+    border-color: #667eea;
+    background: #667eea;
+    color: white;
+}
+
+.convert-btn {
+    width: 100%;
+    padding: 15px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.convert-btn:hover:not(:disabled) {
+    background: #218838;
+}
+
+.convert-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Прогресс */
+.progress-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.progress-container {
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #eee;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+#progressText {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Скачивание */
+.download-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.download-section h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.download-list {
+    margin-bottom: 30px;
+}
+
+.download-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+}
+
+.download-info h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.download-info p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.download-btn {
+    padding: 8px 15px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.download-btn:hover {
+    background: #5a67d8;
+}
+
+.download-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.download-all-btn {
+    padding: 15px 30px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.download-all-btn:hover {
+    background: #218838;
+}
+
+.clear-btn {
+    padding: 15px 30px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.clear-btn:hover {
+    background: #c82333;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    color: white;
+    opacity: 0.8;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .upload-area {
+        padding: 40px 20px;
+    }
+
+    .converter-section {
+        padding: 20px;
+    }
+
+    .format-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .download-actions {
+        flex-direction: column;
+    }
+
+    .download-all-btn, .clear-btn {
+        width: 100%;
+    }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.converter-section, .progress-section, .download-section {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Уведомления */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.toast.error {
+    background: #dc3545;
+}
+
+.toast.success {
+    background: #28a745;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер Форматов Файлов</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠️ Конвертер Форматов Файлов</h1>
+            <p>Конвертируйте PDF, изображения и видео онлайн</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📁</div>
+                        <p>Перетащите файлы сюда или <button type="button" onclick="document.getElementById('fileInput').click()" class="upload-link">выберите файлы</button></p>
+                        <p class="upload-hint">Поддержка: PDF, JPG, PNG, GIF, WebP, MP4, AVI, MOV, WebM (макс 50MB)</p>
+                        <input type="file" id="fileInput" name="files" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.mp4,.avi,.mov,.webm" style="display: none;">
+                    </div>
+                </form>
+            </div>
+
+            <div class="converter-section" id="converterSection" style="display: none;">
+                <div class="file-list" id="fileList">
+                    <h3>Загруженные файлы:</h3>
+                </div>
+
+                <div class="conversion-options">
+                    <h3>Выберите формат конвертации:</h3>
+                    <div class="format-buttons" id="formatButtons"></div>
+                </div>
+
+                <button id="convertBtn" class="convert-btn" disabled>
+                    🔄 Начать конвертацию
+                </button>
+            </div>
+
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText">Подготовка к конвертации...</p>
+                </div>
+            </div>
+
+            <div class="download-section" id="downloadSection" style="display: none;">
+                <h3>Готовые файлы:</h3>
+                <div class="download-list" id="downloadList"></div>
+                <div class="download-actions">
+                    <button id="downloadAllBtn" class="download-all-btn">📥 Скачать все (ZIP)</button>
+                    <button id="clearAllBtn" class="clear-btn">🗑️ Очистить все</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2024 Конвертер Файлов | Поддержка: PDF, изображения, видео</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

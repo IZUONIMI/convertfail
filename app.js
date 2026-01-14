@@ -2,7 +2,6 @@ class FileConverter {
     constructor() {
         this.files = [];
         this.selectedFormat = null;
-
         this.init();
     }
 
@@ -10,31 +9,44 @@ class FileConverter {
         this.bindEvents();
     }
 
-    }
-
-   
-
-
-
     bindEvents() {
         // Загрузка файлов
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const uploadForm = document.getElementById('uploadForm');
 
-        uploadArea.addEventListener('click', () => fileInput.click());
-        uploadArea.addEventListener('dragover', this.handleDragOver.bind(this));
-        uploadArea.addEventListener('drop', this.handleDrop.bind(this));
-        uploadArea.addEventListener('dragleave', this.handleDragLeave.bind(this));
-        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
-        uploadForm.addEventListener('submit', this.handleFormSubmit.bind(this));
+        if (uploadArea) {
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', this.handleDragOver.bind(this));
+            uploadArea.addEventListener('drop', this.handleDrop.bind(this));
+            uploadArea.addEventListener('dragleave', this.handleDragLeave.bind(this));
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        }
+
+        if (uploadForm) {
+            uploadForm.addEventListener('submit', this.handleFormSubmit.bind(this));
+        }
 
         // Конвертация
-        document.getElementById('convertBtn').addEventListener('click', this.convertFiles.bind(this));
+        const convertBtn = document.getElementById('convertBtn');
+        if (convertBtn) {
+            convertBtn.addEventListener('click', this.convertFiles.bind(this));
+        }
 
         // Скачивание
-        document.getElementById('downloadAllBtn').addEventListener('click', this.downloadAll.bind(this));
-        document.getElementById('clearAllBtn').addEventListener('click', this.clearAll.bind(this));
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+
+        if (downloadAllBtn) {
+            downloadAllBtn.addEventListener('click', this.downloadAll.bind(this));
+        }
+
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', this.clearAll.bind(this));
+        }
     }
 
     handleDragOver(e) {
@@ -270,23 +282,6 @@ class FileConverter {
         document.getElementById('downloadSection').style.display = 'none';
     }
 
-    updateFormatButtons() {
-        const formatButtons = document.getElementById('formatButtons');
-        formatButtons.innerHTML = '';
-
-        const formats = this.getAvailableFormats();
-
-        formats.forEach(format => {
-            const button = document.createElement('button');
-            button.className = 'format-btn';
-            button.textContent = format.label;
-            button.dataset.format = format.value;
-            button.onclick = () => this.selectFormat(format.value, button);
-
-            formatButtons.appendChild(button);
-        });
-    }
-
     getAvailableFormats() {
         const hasImages = this.files.some(file => file.type.startsWith('image/'));
         const hasVideos = this.files.some(file => file.type.startsWith('video/'));
@@ -500,8 +495,6 @@ class FileConverter {
         downloadSection.style.display = 'block';
     }
 
-    // Методы для работы с сервером заменены на демо-функционал для GitHub Pages
-
     showProgress() {
         document.getElementById('progressSection').style.display = 'block';
         document.getElementById('downloadSection').style.display = 'none';
@@ -514,33 +507,6 @@ class FileConverter {
     updateProgress(text, percentage) {
         document.getElementById('progressText').textContent = text;
         document.getElementById('progressFill').style.width = `${percentage}%`;
-    }
-
-    showDownloadSection(convertedFiles) {
-        this.hideProgress();
-        const downloadSection = document.getElementById('downloadSection');
-        const downloadList = document.getElementById('downloadList');
-
-        downloadList.innerHTML = '';
-
-        convertedFiles.forEach((file, index) => {
-            const downloadItem = document.createElement('div');
-            downloadItem.className = 'download-item';
-
-            const size = this.formatFileSize(file.size);
-
-            downloadItem.innerHTML = `
-                <div class="download-info">
-                    <h4>${file.originalName}</h4>
-                    <p>Размер: ${size}</p>
-                </div>
-                <a href="${file.downloadUrl}" class="download-btn" download>📥 Скачать</a>
-            `;
-
-            downloadList.appendChild(downloadItem);
-        });
-
-        downloadSection.style.display = 'block';
     }
 
     async downloadAll() {
@@ -580,5 +546,5 @@ class FileConverter {
     }
 }
 
-// Инициализация приложения
+// Initialize the app
 const fileConverter = new FileConverter();

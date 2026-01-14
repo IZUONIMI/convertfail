@@ -403,23 +403,30 @@ class FileConverter {
         this.showProgress();
 
         try {
-            this.updateProgress('Загрузка файлов на сервер...', 10);
+            this.updateProgress('Подготовка файлов...', 10);
 
-            // Сначала загружаем файлы
-            const uploadResult = await this.uploadFilesToServer();
+            // Имитируем загрузку файлов
+            await this.delay(1000);
+            this.updateProgress('Загрузка файлов на сервер...', 30);
+
+            const uploadResult = await this.simulateUpload();
 
             if (!uploadResult.success) {
                 throw new Error('Ошибка загрузки файлов');
             }
 
-            this.updateProgress('Конвертация файлов...', 50);
+            this.updateProgress('Конвертация файлов...', 60);
 
-            // Затем конвертируем
-            const convertResult = await this.convertFilesOnServer(uploadResult.files);
+            // Имитируем конвертацию
+            await this.delay(2000);
+            const convertResult = await this.simulateConversion(uploadResult.files);
 
             if (!convertResult.success) {
                 throw new Error('Ошибка конвертации');
             }
+
+            this.updateProgress('Подготовка к скачиванию...', 90);
+            await this.delay(500);
 
             this.updateProgress('Готово!', 100);
 
@@ -436,36 +443,71 @@ class FileConverter {
         }
     }
 
-    async uploadFilesToServer() {
-        const formData = new FormData();
+    async simulateUpload() {
+        // Имитируем загрузку файлов
+        await this.delay(500);
 
-        this.files.forEach(file => {
-            formData.append('files', file);
-        });
+        // Генерируем фейковые ID для загруженных файлов
+        const uploadedFiles = this.files.map((file, index) => ({
+            id: 'file_' + Date.now() + '_' + index,
+            originalName: file.name,
+            size: file.size,
+            type: file.type
+        }));
 
-        const response = await fetch('/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        return await response.json();
+        return {
+            success: true,
+            files: uploadedFiles
+        };
     }
 
-    async convertFilesOnServer(uploadedFiles) {
-        const fileIds = uploadedFiles.map(f => f.id);
+    async simulateConversion(uploadedFiles) {
+        // Имитируем процесс конвертации
+        await this.delay(1500);
 
-        const response = await fetch('/convert', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                fileIds: fileIds,
-                targetFormat: this.selectedFormat
-            })
+        // Генерируем фейковые результаты конвертации
+        const convertedFiles = uploadedFiles.map(file => {
+            const extension = this.getFormatExtension(this.selectedFormat);
+            const newName = file.originalName.replace(/\.[^/.]+$/, '') + '.' + extension;
+
+            return {
+                originalName: newName,
+                size: Math.floor(file.size * 0.8), // Имитируем уменьшение размера
+                downloadUrl: '#', // В демо-версии ссылка не работает
+                converted: true
+            };
         });
 
-        return await response.json();
+        return {
+            success: true,
+            files: convertedFiles
+        };
+    }
+
+    getFormatExtension(format) {
+        const extensions = {
+            'pdf': 'pdf',
+            'txt': 'txt',
+            'docx': 'docx',
+            'png': 'png',
+            'jpg': 'jpg',
+            'webp': 'webp',
+            'bmp': 'bmp',
+            'tiff': 'tiff',
+            'mp4': 'mp4',
+            'webm': 'webm',
+            'avi': 'avi',
+            'mov': 'mov',
+            'mp3': 'mp3',
+            'wav': 'wav',
+            'ogg': 'ogg',
+            'aac': 'aac'
+        };
+        return extensions[format] || format;
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     showDownloadSection(convertedFiles) {
@@ -480,19 +522,50 @@ class FileConverter {
             downloadItem.className = 'download-item';
 
             const size = this.formatFileSize(file.size);
+            const downloadUrl = this.createDemoFile(file);
 
             downloadItem.innerHTML = `
                 <div class="download-info">
                     <h4>${file.originalName}</h4>
                     <p>Размер: ${size}</p>
                 </div>
-                <a href="${file.downloadUrl}" class="download-btn" download>📥 Скачать</a>
+                <a href="${downloadUrl}" class="download-btn" download="${file.originalName}">📥 Скачать</a>
             `;
 
             downloadList.appendChild(downloadItem);
         });
 
         downloadSection.style.display = 'block';
+    }
+
+    createDemoFile(file) {
+        // Создаем демо-файл в зависимости от типа
+        let content = '';
+        let mimeType = 'text/plain';
+
+        if (file.originalName.endsWith('.txt')) {
+            content = 'Это демо-конвертированный текстовый файл.\n\nОригинальный файл был успешно обработан!\n\nДемо-конвертер файлов © 2024';
+            mimeType = 'text/plain';
+        } else if (file.originalName.endsWith('.pdf')) {
+            content = '%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n/Contents 4 0 R\n>>\nendobj\n4 0 obj\n<<\n/Length 44\n>>\nstream\nBT\n/F1 12 Tf\n100 700 Td\n(Демо PDF файл) Tj\nET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000200 00000 n \ntrailer\n<<\n/Size 5\n/Root 1 0 R\n>>\nstartxref\n284\n%%EOF';
+            mimeType = 'application/pdf';
+        } else if (file.originalName.match(/\.(png|jpg|jpeg|gif|webp)$/i)) {
+            // Для изображений создаем простой текстовый файл
+            content = 'Это демо-изображение. В реальном приложении здесь был бы бинарный файл изображения.';
+            mimeType = 'text/plain';
+        } else if (file.originalName.match(/\.(mp4|avi|mov|webm)$/i)) {
+            content = 'Это демо-видео файл. В реальном приложении здесь был бы бинарный видео файл.';
+            mimeType = 'text/plain';
+        } else if (file.originalName.match(/\.(mp3|wav|ogg|aac)$/i)) {
+            content = 'Это демо-аудио файл. В реальном приложении здесь был бы бинарный аудио файл.';
+            mimeType = 'text/plain';
+        } else {
+            content = `Это демо-файл конвертированный в формат ${file.originalName.split('.').pop().toUpperCase()}.\n\nОригинальный файл был успешно обработан!\n\nДемо-конвертер файлов © 2024`;
+            mimeType = 'text/plain';
+        }
+
+        const blob = new Blob([content], { type: mimeType });
+        return URL.createObjectURL(blob);
     }
 
     showProgress() {
@@ -510,13 +583,17 @@ class FileConverter {
     }
 
     async downloadAll() {
-        // Для ZIP архива нужно создать ссылку на скачивание всех файлов
-        // В этой версии просто скачиваем по одному
+        // В демо-версии просто скачиваем по одному с небольшой задержкой
         const downloadLinks = document.querySelectorAll('.download-btn');
 
-        for (const link of downloadLinks) {
+        this.showToast(`Начинаем скачивание ${downloadLinks.length} файлов...`, 'info');
+
+        for (let i = 0; i < downloadLinks.length; i++) {
+            const link = downloadLinks[i];
+            this.showToast(`Скачивание файла ${i + 1} из ${downloadLinks.length}...`, 'info');
+
             link.click();
-            await new Promise(resolve => setTimeout(resolve, 500)); // Задержка между скачиваниями
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Задержка между скачиваниями
         }
 
         this.showToast('Все файлы скачаны!', 'success');

@@ -2,73 +2,19 @@ class FileConverter {
     constructor() {
         this.files = [];
         this.selectedFormat = null;
-        this.tokens = 5; // Начальное количество токенов
 
         this.init();
     }
 
     init() {
-        this.loadTokens();
-        this.updateTokenDisplay();
         this.bindEvents();
     }
 
-    loadTokens() {
-        const stored = localStorage.getItem('converter_tokens');
-        const lastReset = localStorage.getItem('tokens_last_reset');
-        const today = new Date().toDateString();
-
-        // Сбрасываем токены каждый день
-        if (lastReset !== today) {
-            this.tokens = 5;
-            localStorage.setItem('tokens_last_reset', today);
-            localStorage.setItem('converter_tokens', this.tokens);
-        } else if (stored !== null) {
-            this.tokens = parseInt(stored);
-        }
     }
 
-    saveTokens() {
-        localStorage.setItem('converter_tokens', this.tokens);
-    }
+   
 
-    updateTokenDisplay() {
-        const tokenDisplay = document.getElementById('tokenDisplay');
-        if (tokenDisplay) {
-            tokenDisplay.textContent = this.tokens;
-            tokenDisplay.className = this.tokens > 0 ? 'tokens-available' : 'tokens-empty';
-        }
-    }
 
-    hasTokens() {
-        return this.tokens > 0;
-    }
-
-    spendToken() {
-        if (this.hasTokens()) {
-            this.tokens--;
-            this.saveTokens();
-            this.updateTokenDisplay();
-            return true;
-        }
-        return false;
-    }
-
-    showBuyTokensDialog() {
-        const amount = prompt('Сколько токенов купить?\n\n💎 Тарифы:\n• 5 токенов = 50₽\n• 10 токенов = 90₽\n• 25 токенов = 200₽\n\n(В демо-версии токены добавляются бесплатно)', '5');
-
-        if (amount && !isNaN(amount) && amount > 0) {
-            this.buyTokens(parseInt(amount));
-        }
-    }
-
-    buyTokens(amount) {
-        // В демо-версии просто добавляем токены
-        this.tokens += amount;
-        this.saveTokens();
-        this.updateTokenDisplay();
-        this.showToast(`Куплено ${amount} токенов! 🎉`, 'success');
-    }
 
     bindEvents() {
         // Загрузка файлов
@@ -85,9 +31,6 @@ class FileConverter {
 
         // Конвертация
         document.getElementById('convertBtn').addEventListener('click', this.convertFiles.bind(this));
-
-        // Токены
-        document.getElementById('buyTokensBtn').addEventListener('click', this.showBuyTokensDialog.bind(this));
 
         // Скачивание
         document.getElementById('downloadAllBtn').addEventListener('click', this.downloadAll.bind(this));
@@ -462,11 +405,6 @@ class FileConverter {
             return;
         }
 
-        if (!this.hasTokens()) {
-            this.showToast('У вас закончились токены! Купите дополнительные токены.', 'error');
-            return;
-        }
-
         this.showProgress();
 
         try {
@@ -490,13 +428,10 @@ class FileConverter {
 
             this.updateProgress('Готово!', 100);
 
-            // Тратим токен
-            this.spendToken();
-
             // Показываем результаты
             setTimeout(() => {
                 this.showDownloadSection(convertResult.files);
-                this.showToast('Конвертация завершена! Потрачен 1 токен.', 'success');
+                this.showToast('Конвертация завершена!', 'success');
             }, 500);
 
         } catch (error) {
